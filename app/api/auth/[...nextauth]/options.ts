@@ -29,6 +29,8 @@ export const options: NextAuthOptions = {
           id: '1',
           name: 'beqa',
           password: 'beqa123',
+          email: 'beqa@gmail.com',
+          age: 21,
         };
 
         if (
@@ -42,4 +44,24 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      console.log('token', token);
+      console.log('user', user);
+      if (user) {
+        token.user = user; // Add the entire user object to the token
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      //@ts-ignore
+      session.user = token.user; // Add the user object from the token to the session
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/sign-in',
+    newUser: '/new-user',
+  },
 };

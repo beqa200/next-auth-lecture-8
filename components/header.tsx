@@ -1,6 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
-
+import { signOut } from 'next-auth/react';
 export default function header() {
   return (
     <div>
@@ -9,9 +11,9 @@ export default function header() {
           Login
         </Link>
         <Link href={'/'}>Home</Link>
-        <Link href={'/api/auth/signout'}>
+        <button onClick={() => signOut()}>
           Sign out
-        </Link>
+        </button>
         <Link href={'/about'}>about</Link>
       </nav>
     </div>
