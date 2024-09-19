@@ -46,20 +46,35 @@ export const options: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
-      console.log('token', token);
-      console.log('user', user);
-      if (user) {
-        token.user = user; // Add the entire user object to the token
+    async jwt({
+      token,
+      user,
+      profile,
+      trigger,
+      session,
+    }) {
+      if (trigger === 'update') {
+        token.name = session.name;
       }
-      return token;
+      if (profile) {
+        return { ...token, ...profile };
+      } else {
+        return { ...token, ...user };
+      }
     },
-    async session({ session, token }) {
-      //@ts-ignore
-      session.user = token.user; // Add the user object from the token to the session
+
+    async session({ token, session }) {
+      session.user = token as {
+        id: number;
+        name: string;
+        password: string;
+        email: string;
+        age: number;
+      };
       return session;
     },
   },
+
   pages: {
     signIn: '/sign-in',
     newUser: '/new-user',
